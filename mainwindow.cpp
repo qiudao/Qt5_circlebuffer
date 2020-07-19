@@ -10,11 +10,32 @@
 template<typename T>
 void displayInfo(T& t)
 {
+	SSS s;
+	bool ret;
 	qDebug() << "--------------------------------------------------------";
 	qDebug() << QString("cap: %1").arg(t.cap());
 	qDebug() << QString("len: %1").arg(t.dataAvail());
 	for (int i = 0; i < t.dataAvail(); i++)
-		qDebug() << QString("[%1] name: \"%2\", id: %3").arg(i).arg(t.at(i).name).arg(t.at(i).id);
+	{
+		ret = t.at(i, &s); 
+		if (ret)
+			qDebug() << QString("[%1] name: \"%2\", id: %3").arg(i).arg(s.name).arg(s.id);
+	}
+
+	/* boundary test */
+	SSS s2;
+	int index;
+	index = t.dataAvail();
+	if (t.at(index, &s2))
+		qDebug() << QString("s2 max index failed. (avail %1, index %2)").arg(t.dataAvail()).arg(index);
+	else
+		qDebug() << QString("s2 max index pass. (avail %1, index %2)").arg(t.dataAvail()).arg(index);
+
+	index = 0 - t.dataAvail() - 1;
+	if (t.at(index, &s2))
+		qDebug() << QString("s2 min index failed. (avail %1, index %2)").arg(t.dataAvail()).arg(index);
+	else
+		qDebug() << QString("s2 min index pass. (avail %1, index %2)").arg(t.dataAvail()).arg(index);
 
 }
 
@@ -68,7 +89,6 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
 
 void MainWindow::OnPush()
 {

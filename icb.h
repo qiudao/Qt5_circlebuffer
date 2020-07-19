@@ -64,15 +64,23 @@ class Stack {
 			return true;
 		}
 
-		T& at(int index) 
+		bool at(int index, T *t) 
 		{
+			if (index < 0)
+			{
+				index += m_count;
+				if (index < 0)
+					return false;
+			}
+
 			if (index + 1 > m_count)
-				return m_buf[0];
+				return false;
 
 			index += m_head;
 			if (index > m_cap)
 				index -= (m_cap + 1);
-			return m_buf[index];
+			memcpy((void *)t, (void*)&m_buf[index], sizeof(T));
+			return true;
 		}
 
 		void reset()
